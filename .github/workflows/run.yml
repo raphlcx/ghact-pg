@@ -16,6 +16,7 @@ jobs:
           sudo apt install -y postgresql-14-partman postgresql-14-cron
 
       - name: Configure postgresql.conf
+        run: |
           cp /etc/postgresql/14/main/postgresql.conf "$HOME/postgresql.conf"
           echo "shared_preload_libraries = 'pg_cron'" | tee -a "$HOME/postgresql.conf" > /dev/null
 
