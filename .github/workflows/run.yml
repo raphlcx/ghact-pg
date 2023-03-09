@@ -10,14 +10,24 @@ jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-      - name: Run
+      - name: Install extensions
         run: |
           sudo apt update
-          sudo apt install -y postgresql-14-partman
+          sudo apt install -y postgresql-14-partman postgresql-14-cron
+
+      - name: Start and create extensions
+        run:
           sudo systemctl start postgresql.service
           sudo -u postgres psql -c 'CREATE SCHEMA partman; CREATE EXTENSION pg_partman WITH SCHEMA partman;'
-          sudo -u postgres psql -c 'select * from pg_extension'
+          sudo -u postgres psql -c 'CREATE EXTENSION pg_cron;'
+          sudo -u postgres psql -c 'select * from pg_extension;'
 
-      - name: Verify whether pg setup still persists in subsequent steps
-        run:
-          sudo -u postgres psql -c 'select * from pg_extension'
+      - name: Prepare tables
+        run: |
+          sudo -u postgres psql -c 'create table people ( id bigserial primary key, name text, created_at timestamptz) partition by range (created_at);'
+          sudo -u postgres psql -c 'insert into people (name, created_at) values ('bob', now());'
+
+      - name: Run partman
+        run: |
+          sudo -u postgres psql -c "SELECT partman.create_parent( p_parent_table => 'public.people', p_control => 'created_at', p_type => 'native', p_interval=> 'daily', p_premake => 30);"
+          sudo -u postgres psql -c "UPDATE partman.part_config SET infinite_time_partitions = true, retention = '3 months', retention_keep_table=true WHERE parent_table = 'public.people'; SELECT cron.schedule('@hourly', $$CALL partman.run_maintenance_proc()$$);"
