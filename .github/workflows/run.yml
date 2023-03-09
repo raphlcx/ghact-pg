@@ -17,3 +17,7 @@ jobs:
           sudo systemctl start postgresql.service
           sudo -u postgres psql -c 'CREATE SCHEMA partman; CREATE EXTENSION pg_partman WITH SCHEMA partman;'
           sudo -u postgres psql -c 'select * from pg_extension'
+
+      - name: Verify whether pg setup still persists in subsequent steps
+        run:
+          sudo -u postgres psql -c 'select * from pg_extension'
