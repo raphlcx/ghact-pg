@@ -23,6 +23,9 @@ jobs:
       - name: Start and create extensions
         run: |
           #sudo systemctl start postgresql.service
+          ls -al /bin
+          ls -al /usr/bin
+          ls -al /usr/local/bin
           sudo -u postgres postgres -D /var/lib/postgresql/14/main -c "config_file=$HOME/postgresql.conf" &
           sudo -u postgres psql -c 'CREATE SCHEMA partman; CREATE EXTENSION pg_partman WITH SCHEMA partman;'
           sudo -u postgres psql -c 'CREATE EXTENSION pg_cron;'
