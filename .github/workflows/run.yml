@@ -18,7 +18,7 @@ jobs:
       - name: Configure postgresql.conf
         run: |
           sudo -u postgres cp /etc/postgresql/14/main/postgresql.conf "/tmp/postgresql.conf"
-          sudo -u postgres echo "shared_preload_libraries = 'pg_cron'" | tee -a "/tmp/postgresql.conf" > /dev/null
+          echo "shared_preload_libraries = 'pg_cron'" | sudo -u postgres tee -a "/tmp/postgresql.conf" > /dev/null
 
       - name: Start and create extensions
         run: |
