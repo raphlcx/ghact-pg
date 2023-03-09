@@ -12,5 +12,4 @@ jobs:
     steps:
       - run: |
           sudo systemctl start postgresql.service
-          sudo systemctl cat postgresql.service
-          cat /etc/postgresql/14/main/postgresql.conf
+          psql -c 'CREATE SCHEMA partman; CREATE EXTENSION pg_partman WITH SCHEMA partman;'
