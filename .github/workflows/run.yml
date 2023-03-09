@@ -1,0 +1,16 @@
+name: Run
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          sudo systemctl start postgresql.service
+          sudo systemctl cat postgresql.service
+          cat /etc/postgresql/14/main/postgresql.conf
