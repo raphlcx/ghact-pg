@@ -24,7 +24,7 @@ jobs:
         run: |
           #sudo systemctl start postgresql.service
           systemctl cat postgresql@.service
-          sudo -u posrgres /usr/bin/pg_ctlcluster --skip-systemctl-redirect 14-main -o "-c config_file=$HOME/postgresql.conf" start
+          sudo -u postgres /usr/bin/pg_ctlcluster --skip-systemctl-redirect 14-main -o "-c config_file=$HOME/postgresql.conf" start
           sudo -u postgres psql -c 'CREATE SCHEMA partman; CREATE EXTENSION pg_partman WITH SCHEMA partman;'
           sudo -u postgres psql -c 'CREATE EXTENSION pg_cron;'
           sudo -u postgres psql -c 'select * from pg_extension;'
