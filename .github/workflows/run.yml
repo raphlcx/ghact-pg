@@ -13,18 +13,18 @@ jobs:
       - name: Install extensions
         run: |
           sudo apt update
-          sudo apt install -y postgresql-14 postgresql-14-partman postgresql-14-cron
+          sudo apt install -y postgresql-14-partman postgresql-14-cron
 
       - name: Configure postgresql.conf
         run: |
-          sudo -u postgres cp /etc/postgresql/14/main/postgresql.conf "/tmp/postgresql.conf"
-          echo "shared_preload_libraries = 'pg_cron'" | sudo -u postgres tee -a "/tmp/postgresql.conf" > /dev/null
+          #sudo -u postgres cp /etc/postgresql/14/main/postgresql.conf "/tmp/postgresql.conf"
+          echo "shared_preload_libraries = 'pg_cron'" | sudo -u postgres tee -a "/etc/postgresql/14/main/postgresql.conf" > /dev/null
 
       - name: Start and create extensions
         run: |
-          #sudo systemctl start postgresql.service
-          systemctl cat postgresql@.service
-          sudo -u postgres /usr/bin/pg_ctlcluster --skip-systemctl-redirect 14-main -o "-c config_file=/tmp/postgresql.conf" start
+          sudo systemctl start postgresql.service
+          #systemctl cat postgresql@.service
+          #sudo -u postgres /usr/bin/pg_ctlcluster --skip-systemctl-redirect 14-main -o "-c config_file=/tmp/postgresql.conf" start
           sudo -u postgres psql -c 'CREATE SCHEMA partman; CREATE EXTENSION pg_partman WITH SCHEMA partman;'
           sudo -u postgres psql -c 'CREATE EXTENSION pg_cron;'
           sudo -u postgres psql -c 'select * from pg_extension;'
