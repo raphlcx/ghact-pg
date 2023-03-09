@@ -13,7 +13,7 @@ jobs:
       - name: Install extensions
         run: |
           sudo apt update
-          sudo apt install -y postgresql-14-partman postgresql-14-cron
+          sudo apt install -y postgresql-14 postgresql-14-partman postgresql-14-cron
 
       - name: Configure postgresql.conf
         run: |
