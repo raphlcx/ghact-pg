@@ -31,7 +31,7 @@ jobs:
 
       - name: Prepare tables
         run: |
-          sudo -u postgres psql -c 'create table people ( id bigserial primary key, name text, created_at timestamptz) partition by range (created_at);'
+          sudo -u postgres psql -c 'create table people (id bigserial, name text, created_at timestamptz, constraint pk_people primary key (id, created_at)) partition by range (created_at);'
           sudo -u postgres psql -c 'insert into people (name, created_at) values ('bob', now());'
 
       - name: Run partman
