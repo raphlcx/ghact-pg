@@ -10,8 +10,10 @@ jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-      - run: |
+      - name: Run
+        run: |
           sudo apt update
           sudo apt install -y postgresql-14-partman
           sudo systemctl start postgresql.service
           sudo -u postgres psql -c 'CREATE SCHEMA partman; CREATE EXTENSION pg_partman WITH SCHEMA partman;'
+          sudo -u postgres psql -c 'select * from pg_extension'
